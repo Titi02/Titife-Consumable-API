@@ -345,7 +345,7 @@ export default function ConsumerApp() {
                   </div>
                   <div className="card-row">
                     <span className="card-subtitle">Available Seats:</span>
-                    <span style={{ fontWeight: 700, color: sch.availableSeats > 0 ? "#34d399" : "#f87171" }}>
+                    <span style={{ fontWeight: 700, color: sch.availableSeats > 0 ? "var(--success-color)" : "var(--danger-color)" }}>
                       {sch.availableSeats} / {sch.totalSeats} seats
                     </span>
                   </div>
