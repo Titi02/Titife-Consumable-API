@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum OperatorStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum RouteStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum ScheduleStatus {
+  SCHEDULED
+  BOARDING
+  COMPLETED
+  CANCELLED
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model Operator {
+  id           String         @id
+  name         String         @unique
+  code         String         @unique
+  headquarters String
+  supportEmail String
+  supportPhone String
+  status       OperatorStatus @default(ACTIVE)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  routes    Route[]
+  schedules Schedule[]
+
+  @@index([status])
+}
+
+model Route {
+  id               String      @id
+  operatorId       String
+  operator         Operator    @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+  originState      String
+  originCity       String
+  destinationState String
+  destinationCity  String
+  distanceKm       Int
+  estimatedMinutes Int
+  baseFareAmount   Int
+  currency         String      @default("NGN")
+  status           RouteStatus @default(ACTIVE)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  schedules Schedule[]
+
+  @@index([originState, destinationState])
+  @@index([operatorId])
+  @@index([status])
+}
+
+model Schedule {
+  id                    String         @id
+  routeId               String
+  route                 Route          @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  operatorId            String
+  operator              Operator       @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+  busRegistrationNumber String
+  busModel              String
+  totalSeats            Int
+  availableSeats        Int
+  departureTime         DateTime
+  arrivalTime           DateTime
+  fareAmount            Int
+  currency              String         @default("NGN")
+  status                ScheduleStatus @default(SCHEDULED)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  bookings Booking[]
+
+  @@index([routeId])
+  @@index([operatorId])
+  @@index([departureTime])
+  @@index([status])
+}
+
+model Booking {
+  id               String        @id
+  scheduleId       String
+  schedule         Schedule      @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  passengerName    String
+  passengerPhone   String
+  passengerEmail   String
+  seatNumber       Int
+  totalAmount      Int
+  currency         String        @default("NGN")
+  bookingReference String        @unique
+  status           BookingStatus @default(CONFIRMED)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([scheduleId])
+  @@index([status])
+  @@index([bookingReference])
+}
