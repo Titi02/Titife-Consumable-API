@@ -6,7 +6,7 @@ This document defines the strict engineering guidelines and operational workflow
 
 ## 1. Operating Rules & Workflow
 
-1. **Read Governance Documents First**: Read `PRD.md` and `AGENTS.md` in full before starting any phase or writing any code.
+1. **Read Governance Documents First**: Read `docs/PRD.md` and `AGENTS.md` in full before starting any phase or writing any code.
 2. **Inspect Before Acting**: Always inspect existing files, git status, and dependencies before modifying or creating files.
 3. **Plan Before Implementation**: For every phase, produce an implementation plan artifact and review it before executing.
 4. **Sequential Execution**: Work sequentially through the defined implementation phases (Phase 0 to Phase 6). Do not attempt to run phases in parallel.

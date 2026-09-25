@@ -262,7 +262,7 @@ To guarantee no bare HTML 404 or bare text 405 error escapes:
 ---
 
 ## 13. Phased Implementation Roadmap
-- **Phase 0**: Governance Documents (`PRD.md`, `AGENTS.md`) & Review.
+- **Phase 0**: Governance Documents (`docs/PRD.md`, `AGENTS.md`) & Review.
 - **Phase 1**: Scaffold Next.js App Router project, TypeScript, Prisma schema, PostgreSQL connection config, Zod schemas, helper utilities, seed script.
 - **Phase 2**: Implement core API routes (`/api/v1/...`), list pagination/filtering/sorting, detail handlers, atomic booking creation, catch-all 404 route, method 405 handlers.
 - **Phase 3**: Hardening, rate limiting integration, error envelope verification, bad input rejection testing (Step 4 checks).
