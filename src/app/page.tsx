@@ -11,6 +11,13 @@ interface PaginationMeta {
   hasMore: boolean;
 }
 
+const DEFAULT_SORT_FIELD: Record<ResourceType, string> = {
+  operators: "createdAt",
+  routes: "createdAt",
+  schedules: "departureTime",
+  bookings: "createdAt",
+};
+
 export default function ConsumerApp() {
   const [activeTab, setActiveTab] = useState<ResourceType>("operators");
   const [search, setSearch] = useState("");
@@ -27,17 +34,13 @@ export default function ConsumerApp() {
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
-  // Reset filters when tab changes
-  useEffect(() => {
+  const handleTabChange = (tab: ResourceType) => {
+    setActiveTab(tab);
     setSearch("");
     setStatusFilter("");
     setOffset(0);
-    if (activeTab === "operators" || activeTab === "routes" || activeTab === "bookings") {
-      setSortField("createdAt");
-    } else if (activeTab === "schedules") {
-      setSortField("departureTime");
-    }
-  }, [activeTab]);
+    setSortField(DEFAULT_SORT_FIELD[tab]);
+  };
 
   // Fetch API Data
   const fetchData = useCallback(async () => {
@@ -113,7 +116,7 @@ export default function ConsumerApp() {
               key={tab}
               id={`tab-${tab}`}
               className={`tab-button ${activeTab === tab ? "active" : ""}`}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleTabChange(tab)}
             >
               {tab.toUpperCase()}
             </button>
