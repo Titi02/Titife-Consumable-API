@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Titife Transport Explorer — Intercity Bus API Client",
   description: "Live consumer proof application calling the Titife Consumable REST API for Nigerian intercity bus transport operations.",
