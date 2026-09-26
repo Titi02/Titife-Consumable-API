@@ -49,7 +49,7 @@ export async function checkRateLimit(ip: string): Promise<{
     }
   }
 
-  // Degraded mode: Local in-memory sliding window fallback
+  // Degraded mode: Local in-memory fixed window fallback
   const now = Date.now();
   const windowMs = RATE_LIMIT_CONFIG.windowSeconds * 1000;
   const entry = inMemoryStore.get(ip);
