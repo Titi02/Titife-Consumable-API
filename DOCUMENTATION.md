@@ -146,10 +146,16 @@ exactly. That drift is also the best proof of the seat formula: the test booking
 `seatNumber=3`, precisely `totalSeats(18) - availableSeats(16) + 1 = 3`.
 
 **Release sequence:** provision Neon → set `DATABASE_URL`/`DIRECT_URL` → `db push` + `db seed`
-against the **direct** URL → set Upstash credentials → deploy to Vercel → set
-`NEXT_PUBLIC_API_BASE_URL` and rebuild. No deployment URL is committed; `README.md` §1 records it.
+against the **direct** URL → set Upstash credentials → deploy to Railway → set
+`NEXT_PUBLIC_API_BASE_URL` and rebuild. The live deployment is
+`https://exemplary-smile-production-8df4.up.railway.app`, with public API base
+`https://exemplary-smile-production-8df4.up.railway.app/api/v1`; `README.md` §1 records it.
 
 ## 5. Evidence
+
+**Live API base URL:** `https://exemplary-smile-production-8df4.up.railway.app/api/v1`
+(deployment origin `https://exemplary-smile-production-8df4.up.railway.app`). The three captures
+below were taken against this deployment, not a local server.
 
 | Artifact | What it proves |
 | :--- | :--- |
@@ -207,7 +213,7 @@ export const RATE_LIMIT_CONFIG = { maxRequests: 100, windowSeconds: 60 };
 window (`rateLimit.ts:31-34`) and the in-memory fixed-window fallback (`rateLimit.ts:65,74,82`).
 If the number were duplicated per branch, a fallback incident could silently enforce a different
 limit than production; one constant makes divergence impossible. The value is a capacity policy
-tied to Neon's pooled connection limits and Vercel function concurrency, so it belongs in version
+tied to Neon's pooled connection limits and Railway function concurrency, so it belongs in version
 control where it is reviewable in a diff, not in an env var where an accidental production override
 would change behaviour with no code trace. `middleware.ts` never mentions `100`, only the
 `{ success, limit, remaining, resetSeconds }` return, so the limiter is swappable without touching

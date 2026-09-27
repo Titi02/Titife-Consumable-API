@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD) — Titife Consumable API
 
 ## 1. Product Summary
-**Titife Consumable API** is a production-grade, highly reliable RESTful Web API for intercity bus transport operations across Nigeria. Built on Next.js (App Router), TypeScript, Prisma, and PostgreSQL, the API provides public read/write capabilities for operators, intercity routes, bus schedules, and passenger bookings. All monetary amounts are stored strictly as integers in minor units (NGN kobo). The project features strict validation (Zod), standardized success/error response envelopes, IP-based rate limiting via a shared Redis store, repeatable deterministic database seeding, comprehensive documentation, and a minimal web consumer application deployed on Vercel.
+**Titife Consumable API** is a production-grade, highly reliable RESTful Web API for intercity bus transport operations across Nigeria. Built on Next.js (App Router), TypeScript, Prisma, and PostgreSQL, the API provides public read/write capabilities for operators, intercity routes, bus schedules, and passenger bookings. All monetary amounts are stored strictly as integers in minor units (NGN kobo). The project features strict validation (Zod), standardized success/error response envelopes, IP-based rate limiting via a shared Redis store, repeatable deterministic database seeding, comprehensive documentation, and a minimal web consumer application deployed on Railway. The live public API base URL is `https://exemplary-smile-production-8df4.up.railway.app/api/v1`.
 
 ---
 
@@ -14,7 +14,7 @@ Intercity bus travel systems require predictable, low-latency, and well-structur
 - **Data Integrity & Consistency**: Enforce strict validation (Zod), whitelist-based sorting, offset-based pagination with clamping (max 100), and integer minor units for NGN currency.
 - **Race Condition Safety**: Protect seat allocation during booking creation using atomic Prisma transactions and database CHECK constraints.
 - **Production Hardening**: Enforce IP-based rate limiting (100 req/min) via Redis, honest HTTP status codes (200, 201, 400, 404, 405, 422, 429, 500), and comprehensive OpenAPI-style documentation in `README.md`.
-- **Public Proof & Consumption**: Deploy to Vercel with Neon PostgreSQL and Upstash Redis, and provide a lightweight web consumer UI to verify live pagination, filtering, and data fetching.
+- **Public Proof & Consumption**: Deploy to Railway with Neon PostgreSQL and Upstash Redis, and provide a lightweight web consumer UI to verify live pagination, filtering, and data fetching.
 
 ### Non-Goals
 - User authentication, login/JWT, or RBAC.
@@ -243,7 +243,7 @@ To guarantee no bare HTML 404 or bare text 405 error escapes:
 
 ## 11. Consumer Application Architecture
 - Lightweight Next.js client rendered at root `/` or `/consumer`.
-- Fetches data directly from the deployed API public production URL (configured via `NEXT_PUBLIC_API_BASE_URL`).
+- Fetches data directly from the deployed API public production URL (configured via `NEXT_PUBLIC_API_BASE_URL`), which is `https://exemplary-smile-production-8df4.up.railway.app/api/v1`.
 - UI Controls:
   - Resource selector (Operators / Routes / Schedules / Bookings).
   - Search / Filter bar (e.g. State filter, Status filter).
@@ -254,12 +254,12 @@ To guarantee no bare HTML 404 or bare text 405 error escapes:
 
 ## 12. Risks & Assumptions
 ### Risks
-- Serverless cold starts on Vercel with Prisma connection pool exhaustion (mitigated by using Neon connection pooling `DATABASE_URL`).
+- Serverless cold starts on Railway with Prisma connection pool exhaustion (mitigated by using Neon connection pooling `DATABASE_URL`).
 - Race conditions during peak seat booking attempts (mitigated by Prisma `$transaction` and SQL CHECK constraint `available_seats >= 0`).
 
 ### Assumptions
 - Upstash Redis credentials will be provided in environment variables (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) or in-memory fallback will run cleanly with explicit documentation.
-- Vercel and Neon Postgres credentials will be available for production deployment.
+- Railway and Neon Postgres credentials will be available for production deployment.
 
 ---
 
@@ -268,6 +268,6 @@ To guarantee no bare HTML 404 or bare text 405 error escapes:
 - **Phase 1**: Scaffold Next.js App Router project, TypeScript, Prisma schema, PostgreSQL connection config, Zod schemas, helper utilities, seed script.
 - **Phase 2**: Implement core API routes (`/api/v1/...`), list pagination/filtering/sorting, detail handlers, atomic booking creation, catch-all 404 route, method 405 handlers.
 - **Phase 3**: Hardening, rate limiting integration, error envelope verification, bad input rejection testing (Step 4 checks).
-- **Phase 4**: Production documentation in `README.md`, git setup, Vercel deployment setup, Neon DB migration, production seed execution, live URL verification.
+- **Phase 4**: Production documentation in `README.md`, git setup, Railway deployment setup, Neon DB migration, production seed execution, live URL verification.
 - **Phase 5**: Web consumer UI implementation calling live URL, verification via browser tool.
 - **Phase 6**: Final audit against requirements and acceptance criteria.

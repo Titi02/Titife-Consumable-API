@@ -12,17 +12,19 @@ RESTful Web API for Nigerian intercity bus transport, built with **Next.js (App 
 
 ## 1. Setup
 
-### Deployment Status
+### Live Deployment
 
-- **Deployment URL**: Not deployed yet.
-- **Public API base URL**: Not available until deployed (expected form `<deployment-url>/api/v1`).
-- **Consumer web app**: Not available until deployed (expected form `<deployment-url>/`).
+- **Deployment origin**: `https://exemplary-smile-production-8df4.up.railway.app`
+- **Public API base URL**: `https://exemplary-smile-production-8df4.up.railway.app/api/v1`
+- **Deployed to**: Railway.
 
-Once deployed, set the values above and point `NEXT_PUBLIC_API_BASE_URL` at the API origin. Every `curl` example below uses `$BASE`, so set it once per shell:
+Every `curl` example below uses `$BASE`, so set it once per shell. `$BASE` is the deployment **origin** — each example appends the versioned `/api/v1` path itself:
 
 ```bash
-export BASE="<deployment-url>"
+export BASE="https://exemplary-smile-production-8df4.up.railway.app"
 ```
+
+`NEXT_PUBLIC_API_BASE_URL` must be the origin only (no trailing `/api/v1`), so set it to `https://exemplary-smile-production-8df4.up.railway.app`.
 
 ### Environment Variables (`.env`)
 
