@@ -2,7 +2,7 @@ import { z } from "zod";
 import { BookingStatus } from "@prisma/client";
 
 export const createBookingSchema = z.object({
-  scheduleId: z.string({ required_error: "scheduleId is required" }),
+  scheduleId: z.string({ required_error: "scheduleId is required" }).trim().min(1, "scheduleId is required"),
   passengerName: z.string({ required_error: "passengerName is required" }).min(2, "passengerName is required"),
   passengerPhone: z.string({ required_error: "passengerPhone is required" }).min(5, "passengerPhone is required"),
   passengerEmail: z.string({ required_error: "passengerEmail is required" }).email("passengerEmail must be a valid email"),
